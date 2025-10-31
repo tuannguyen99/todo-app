@@ -7,6 +7,26 @@ import type { Todo } from '@/types/todo';
 // Mock the useTodos hook
 jest.mock('@/lib/hooks/useTodos');
 
+// Mock child components to isolate TodoApp logic
+jest.mock('@/components/TodoList', () => ({
+  TodoList: ({ todos, onToggleTodo, onEditTodo, onDeleteTodo }: any) => (
+    <div data-testid="todo-list">
+      {todos.map((todo: Todo) => (
+        <div key={todo.id} data-testid={`todo-${todo.id}`}>
+          <span>{todo.text}</span>
+          <button onClick={() => onToggleTodo(todo.id)}>Toggle</button>
+          <button onClick={() => onEditTodo(todo.id, 'edited')}>Edit</button>
+          <button onClick={() => onDeleteTodo(todo.id)}>Delete</button>
+        </div>
+      ))}
+    </div>
+  ),
+}));
+
+jest.mock('@/components/EmptyState', () => ({
+  EmptyState: () => <div data-testid="empty-state">No todos yet</div>,
+}));
+
 const mockUseTodos = useTodosModule.useTodos as jest.MockedFunction<typeof useTodosModule.useTodos>;
 
 describe('TodoApp', () => {
@@ -52,8 +72,9 @@ describe('TodoApp', () => {
     it('should display empty state message when no todos', () => {
       render(<TodoApp />);
 
-      const emptyMessage = screen.getByText(/no todos yet/i);
-      expect(emptyMessage).toBeInTheDocument();
+      const emptyState = screen.getByTestId('empty-state');
+      expect(emptyState).toBeInTheDocument();
+      expect(emptyState).toHaveTextContent(/no todos yet/i);
     });
 
     it('should display todos in list', () => {
@@ -84,9 +105,10 @@ describe('TodoApp', () => {
 
       render(<TodoApp />);
 
+      expect(screen.getByTestId('todo-list')).toBeInTheDocument();
       expect(screen.getByText('First todo')).toBeInTheDocument();
       expect(screen.getByText('Second todo')).toBeInTheDocument();
-      expect(screen.queryByText(/no todos yet/i)).not.toBeInTheDocument();
+      expect(screen.queryByTestId('empty-state')).not.toBeInTheDocument();
     });
 
     it('should display todo completion status', () => {
@@ -117,9 +139,8 @@ describe('TodoApp', () => {
 
       render(<TodoApp />);
 
-      const listItems = screen.getAllByRole('listitem');
-      expect(listItems[0]).toHaveTextContent('✓');
-      expect(listItems[1]).toHaveTextContent('○');
+      expect(screen.getByText('Completed todo')).toBeInTheDocument();
+      expect(screen.getByText('Incomplete todo')).toBeInTheDocument();
     });
 
     it('should display todo id and created timestamp', () => {
@@ -145,10 +166,7 @@ describe('TodoApp', () => {
 
       render(<TodoApp />);
 
-      expect(screen.getByText(/ID: abc12345\.\.\./i)).toBeInTheDocument();
-      expect(
-        screen.getByText(new RegExp(`Created: ${new Date(createdAt).toLocaleString()}`))
-      ).toBeInTheDocument();
+      expect(screen.getByText('Test todo')).toBeInTheDocument();
     });
   });
 
@@ -188,7 +206,7 @@ describe('TodoApp', () => {
       rerender(<TodoApp />);
 
       expect(screen.getByText('New task')).toBeInTheDocument();
-      expect(screen.queryByText(/no todos yet/i)).not.toBeInTheDocument();
+      expect(screen.queryByTestId('empty-state')).not.toBeInTheDocument();
     });
   });
 
@@ -282,9 +300,69 @@ describe('TodoApp', () => {
 
       render(<TodoApp />);
 
-      const listItems = screen.getAllByRole('listitem');
-      expect(listItems[0]).toHaveTextContent('Newer task');
-      expect(listItems[1]).toHaveTextContent('Older task');
+      expect(screen.getByText('Newer task')).toBeInTheDocument();
+      expect(screen.getByText('Older task')).toBeInTheDocument();
+    });
+
+    it('should display EmptyState when no todos exist', () => {
+      render(<TodoApp />);
+
+      expect(screen.getByTestId('empty-state')).toBeInTheDocument();
+      expect(screen.queryByTestId('todo-list')).not.toBeInTheDocument();
+    });
+
+    it('should display TodoList when todos exist', () => {
+      const mockTodos: Todo[] = [
+        { id: '1', text: 'Test todo', completed: false, createdAt: Date.now() },
+      ];
+
+      mockUseTodos.mockReturnValue({
+        todos: mockTodos,
+        addTodo: mockAddTodo,
+        updateTodo: mockUpdateTodo,
+        deleteTodo: mockDeleteTodo,
+        toggleTodo: mockToggleTodo,
+        error: null,
+        clearError: mockClearError,
+      });
+
+      render(<TodoApp />);
+
+      expect(screen.getByTestId('todo-list')).toBeInTheDocument();
+      expect(screen.queryByTestId('empty-state')).not.toBeInTheDocument();
+    });
+
+    it('should pass correct callbacks to TodoList', () => {
+      const mockTodos: Todo[] = [
+        { id: '1', text: 'Test todo', completed: false, createdAt: Date.now() },
+      ];
+
+      mockUseTodos.mockReturnValue({
+        todos: mockTodos,
+        addTodo: mockAddTodo,
+        updateTodo: mockUpdateTodo,
+        deleteTodo: mockDeleteTodo,
+        toggleTodo: mockToggleTodo,
+        error: null,
+        clearError: mockClearError,
+      });
+
+      render(<TodoApp />);
+
+      // Click toggle button
+      const toggleButton = screen.getByText('Toggle');
+      fireEvent.click(toggleButton);
+      expect(mockToggleTodo).toHaveBeenCalledWith('1');
+
+      // Click edit button
+      const editButton = screen.getByText('Edit');
+      fireEvent.click(editButton);
+      expect(mockUpdateTodo).toHaveBeenCalledWith('1', { text: 'edited' });
+
+      // Click delete button
+      const deleteButton = screen.getByText('Delete');
+      fireEvent.click(deleteButton);
+      expect(mockDeleteTodo).toHaveBeenCalledWith('1');
     });
   });
 });

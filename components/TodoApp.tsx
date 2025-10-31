@@ -1,6 +1,8 @@
 'use client';
 
 import { TodoInput } from '@/components/TodoInput';
+import { TodoList } from '@/components/TodoList';
+import { EmptyState } from '@/components/EmptyState';
 import { useTodos } from '@/lib/hooks/useTodos';
 
 /**
@@ -10,7 +12,7 @@ import { useTodos } from '@/lib/hooks/useTodos';
  * @returns TodoApp component
  */
 export function TodoApp() {
-  const { todos, addTodo, error, clearError } = useTodos();
+  const { todos, addTodo, updateTodo, deleteTodo, toggleTodo, error, clearError } = useTodos();
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -35,32 +37,16 @@ export function TodoApp() {
             </div>
           )}
 
-          {/* Temporary todo display for Story 1.3 verification */}
-          {/* Will be replaced by TodoList component in Story 1.4 */}
-          <div className="space-y-2">
-            {todos.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">
-                No todos yet. Add one above to get started!
-              </p>
-            ) : (
-              <ul className="space-y-2">
-                {todos.map((todo) => (
-                  <li key={todo.id} className="p-3 bg-gray-50 rounded border border-gray-200">
-                    <div className="flex justify-between items-start">
-                      <span className="text-gray-900">{todo.text}</span>
-                      <span className="text-xs text-gray-500 ml-2">
-                        {todo.completed ? '✓' : '○'}
-                      </span>
-                    </div>
-                    <div className="text-xs text-gray-400 mt-1">
-                      ID: {todo.id.substring(0, 8)}... | Created:{' '}
-                      {new Date(todo.createdAt).toLocaleString()}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          {todos.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <TodoList
+              todos={todos}
+              onToggleTodo={toggleTodo}
+              onEditTodo={(id, text) => updateTodo(id, { text })}
+              onDeleteTodo={deleteTodo}
+            />
+          )}
         </div>
       </div>
     </div>
