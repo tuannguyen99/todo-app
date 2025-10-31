@@ -57,4 +57,3 @@ todo-app/
 ├── tailwind.config.ts            # Tailwind CSS configuration
 └── tsconfig.json                 # TypeScript configuration
 ```
-

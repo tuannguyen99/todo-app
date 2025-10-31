@@ -109,4 +109,3 @@ sequenceDiagram
         App->>User: Show warning toast
     end
 ```
-

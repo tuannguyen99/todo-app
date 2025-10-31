@@ -7,12 +7,14 @@ The application has one core data model representing a todo item. This model is 
 **Purpose:** Represents a single todo item with its text content, completion status, and metadata for ordering and identification.
 
 **Key Attributes:**
+
 - `id`: string - Unique identifier generated via `crypto.randomUUID()`
 - `text`: string - The todo item's text content (user-entered)
 - `completed`: boolean - Whether the todo has been marked as complete
 - `createdAt`: number - Unix timestamp (milliseconds) for sorting and display
 
 **Design Decisions:**
+
 - **UUID as string**: Using native `crypto.randomUUID()` provides guaranteed uniqueness without dependencies
 - **Unix timestamp**: Stored as number for efficient sorting and comparison; can be formatted for display as needed
 - **Boolean completion**: Simple true/false rather than enum to minimize complexity
@@ -28,13 +30,13 @@ The application has one core data model representing a todo item. This model is 
 export interface Todo {
   /** Unique identifier (UUID v4) */
   id: string;
-  
+
   /** User-entered todo text content */
   text: string;
-  
+
   /** Whether the todo is marked as complete */
   completed: boolean;
-  
+
   /** Creation timestamp in milliseconds since Unix epoch */
   createdAt: number;
 }
@@ -72,7 +74,6 @@ export const isValidTodoText = (text: string): boolean => {
 export const TODO_CONSTRAINTS = {
   MIN_TEXT_LENGTH: 1,
   MAX_TEXT_LENGTH: 500,
-  STORAGE_KEY: 'todos'
+  STORAGE_KEY: 'todos',
 } as const;
 ```
-

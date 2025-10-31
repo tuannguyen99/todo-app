@@ -7,7 +7,7 @@
 const nextConfig = {
   output: 'export', // Static export for client-side only app
   images: {
-    unoptimized: true // Required for static export
+    unoptimized: true, // Required for static export
   },
   // Security headers
   async headers() {
@@ -17,20 +17,20 @@ const nextConfig = {
         headers: [
           {
             key: 'X-DNS-Prefetch-Control',
-            value: 'on'
+            value: 'on',
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            value: 'SAMEORIGIN',
           },
           {
             key: 'X-Content-Type-Options',
-            value: 'nosniff'
-          }
-        ]
-      }
+            value: 'nosniff',
+          },
+        ],
+      },
     ];
-  }
+  },
 };
 
 module.exports = nextConfig;
@@ -77,4 +77,3 @@ module.exports = nextConfig;
   }
 }
 ```
-

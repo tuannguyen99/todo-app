@@ -42,7 +42,7 @@ export const ERROR_MESSAGES = {
   UNAVAILABLE: 'Storage is not available. Your todos will not be saved.',
   QUOTA_EXCEEDED: 'Storage limit reached. Please delete some todos to free up space.',
   SAVE_ERROR: 'Failed to save your changes. Please try again.',
-  LOAD_ERROR: 'Failed to load your todos. Please refresh the page.'
+  LOAD_ERROR: 'Failed to load your todos. Please refresh the page.',
 } as const;
 ```
 
@@ -55,15 +55,16 @@ try {
   setError(null);
 } catch (err) {
   // User-friendly message
-  const message = err instanceof StorageError 
-    ? ERROR_MESSAGES[err.code] || err.message
-    : 'An unexpected error occurred';
-  
+  const message =
+    err instanceof StorageError
+      ? ERROR_MESSAGES[err.code] || err.message
+      : 'An unexpected error occurred';
+
   setError(message);
-  
+
   // Rollback optimistic update
   setTodos(previousTodos);
-  
+
   // Log for debugging
   console.error('Storage operation failed:', err);
 }
@@ -106,4 +107,3 @@ export default function Error({
   );
 }
 ```
-

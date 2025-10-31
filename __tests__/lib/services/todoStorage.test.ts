@@ -236,12 +236,8 @@ describe('todoStorage', () => {
       expect(ERROR_MESSAGES.QUOTA_EXCEEDED).toBe(
         'Storage limit reached. Please delete some todos to free up space.'
       );
-      expect(ERROR_MESSAGES.SAVE_ERROR).toBe(
-        'Failed to save your changes. Please try again.'
-      );
-      expect(ERROR_MESSAGES.LOAD_ERROR).toBe(
-        'Failed to load your todos. Please refresh the page.'
-      );
+      expect(ERROR_MESSAGES.SAVE_ERROR).toBe('Failed to save your changes. Please try again.');
+      expect(ERROR_MESSAGES.LOAD_ERROR).toBe('Failed to load your todos. Please refresh the page.');
     });
 
     it('should create StorageError with correct properties', () => {

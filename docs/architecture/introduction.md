@@ -12,7 +12,6 @@ This is a new project built from scratch using `create-next-app` with TypeScript
 
 ### Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-10-28 | 1.0 | Initial architecture document creation | Architect (Winston) |
-
+| Date       | Version | Description                            | Author              |
+| ---------- | ------- | -------------------------------------- | ------------------- |
+| 2025-10-28 | 1.0     | Initial architecture document creation | Architect (Winston) |

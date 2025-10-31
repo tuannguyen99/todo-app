@@ -75,4 +75,3 @@ npm start
 ```
 
 **Note:** Since this is a client-side only application, no environment variables are required for the MVP. All configuration is handled through constants in the codebase.
-

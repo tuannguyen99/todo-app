@@ -85,7 +85,7 @@ export const loadTodos = (key: string = TODO_CONSTRAINTS.STORAGE_KEY): Todo[] =>
     }
 
     const parsed = JSON.parse(stored);
-    
+
     // Validate structure - should be an array
     if (!Array.isArray(parsed)) {
       return [];

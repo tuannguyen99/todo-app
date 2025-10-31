@@ -19,14 +19,13 @@ These rules prevent common mistakes and ensure consistency. **All code must foll
 
 ### Naming Conventions
 
-| Element | Convention | Example |
-|---------|-----------|---------|
-| Components | PascalCase | `TodoItem.tsx` |
-| Hooks | camelCase with 'use' prefix | `useTodos.ts` |
-| Utilities | camelCase | `validation.ts` |
-| Types/Interfaces | PascalCase | `Todo`, `TodoItemProps` |
-| Constants | UPPER_SNAKE_CASE | `TODO_CONSTRAINTS` |
-| Functions | camelCase | `addTodo`, `isValidTodoText` |
-| Variables | camelCase | `todoList`, `isEditing` |
-| CSS Classes | Tailwind utilities | `flex items-center gap-2` |
-
+| Element          | Convention                  | Example                      |
+| ---------------- | --------------------------- | ---------------------------- |
+| Components       | PascalCase                  | `TodoItem.tsx`               |
+| Hooks            | camelCase with 'use' prefix | `useTodos.ts`                |
+| Utilities        | camelCase                   | `validation.ts`              |
+| Types/Interfaces | PascalCase                  | `Todo`, `TodoItemProps`      |
+| Constants        | UPPER_SNAKE_CASE            | `TODO_CONSTRAINTS`           |
+| Functions        | camelCase                   | `addTodo`, `isValidTodoText` |
+| Variables        | camelCase                   | `todoList`, `isEditing`      |
+| CSS Classes      | Tailwind utilities          | `flex items-center gap-2`    |

@@ -42,8 +42,8 @@ The application uses **local component state** with **React hooks** for state ma
 ```typescript
 // TodoApp component state (top level)
 interface TodoAppState {
-  todos: Todo[];           // Managed by useTodos hook
-  error: string | null;    // Managed by useTodos hook
+  todos: Todo[]; // Managed by useTodos hook
+  error: string | null; // Managed by useTodos hook
 }
 
 // TodoItem component state (component level)
@@ -90,7 +90,10 @@ import type { Todo } from '@/types/todo';
 import { TODO_CONSTRAINTS } from '@/types/todo';
 
 export class StorageError extends Error {
-  constructor(message: string, public code: string) {
+  constructor(
+    message: string,
+    public code: string
+  ) {
     super(message);
     this.name = 'StorageError';
   }
@@ -107,7 +110,7 @@ export const todoStorage = {
       if (!data) return [];
 
       const parsed = JSON.parse(data);
-      
+
       // Validate structure
       if (!Array.isArray(parsed)) {
         console.warn('Invalid todos data structure, resetting');
@@ -148,7 +151,7 @@ export const todoStorage = {
     } catch (error) {
       console.error('Error clearing todos:', error);
     }
-  }
+  },
 };
 ```
 
@@ -189,7 +192,7 @@ export function useTodos() {
       id: crypto.randomUUID(),
       text: text.trim(),
       completed: false,
-      createdAt: Date.now()
+      createdAt: Date.now(),
     };
 
     const updatedTodos = [newTodo, ...todos];
@@ -206,9 +209,7 @@ export function useTodos() {
   };
 
   const updateTodo = (id: string, updates: UpdateTodoInput) => {
-    const updatedTodos = todos.map(todo =>
-      todo.id === id ? { ...todo, ...updates } : todo
-    );
+    const updatedTodos = todos.map((todo) => (todo.id === id ? { ...todo, ...updates } : todo));
     setTodos(updatedTodos);
 
     try {
@@ -221,7 +222,7 @@ export function useTodos() {
   };
 
   const deleteTodo = (id: string) => {
-    const updatedTodos = todos.filter(todo => todo.id !== id);
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
     setTodos(updatedTodos);
 
     try {
@@ -234,7 +235,7 @@ export function useTodos() {
   };
 
   const toggleTodo = (id: string) => {
-    const todo = todos.find(t => t.id === id);
+    const todo = todos.find((t) => t.id === id);
     if (todo) {
       updateTodo(id, { completed: !todo.completed });
     }
@@ -249,8 +250,7 @@ export function useTodos() {
     deleteTodo,
     toggleTodo,
     error,
-    clearError
+    clearError,
   };
 }
 ```
-

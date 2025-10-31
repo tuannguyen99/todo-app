@@ -38,32 +38,32 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the a
 
 ## Available Scripts
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start the development server on http://localhost:3000 |
-| `npm run build` | Build the application for production |
-| `npm run start` | Start the production server |
-| `npm run lint` | Run ESLint to check for code quality issues |
-| `npm run lint:fix` | Automatically fix ESLint issues |
-| `npm run type-check` | Run TypeScript compiler to check for type errors |
-| `npm test` | Run all tests |
-| `npm run test:watch` | Run tests in watch mode |
-| `npm run test:coverage` | Run tests with coverage report |
-| `npm run format` | Format all code using Prettier |
-| `npm run format:check` | Check if code is formatted correctly |
+| Script                  | Description                                           |
+| ----------------------- | ----------------------------------------------------- |
+| `npm run dev`           | Start the development server on http://localhost:3000 |
+| `npm run build`         | Build the application for production                  |
+| `npm run start`         | Start the production server                           |
+| `npm run lint`          | Run ESLint to check for code quality issues           |
+| `npm run lint:fix`      | Automatically fix ESLint issues                       |
+| `npm run type-check`    | Run TypeScript compiler to check for type errors      |
+| `npm test`              | Run all tests                                         |
+| `npm run test:watch`    | Run tests in watch mode                               |
+| `npm run test:coverage` | Run tests with coverage report                        |
+| `npm run format`        | Format all code using Prettier                        |
+| `npm run format:check`  | Check if code is formatted correctly                  |
 
 ## Tech Stack
 
-| Technology | Version | Purpose |
-|-----------|---------|---------|
-| **Next.js** | 14.2+ | React framework with App Router |
-| **React** | 18.3+ | UI library |
-| **TypeScript** | 5.3+ | Type-safe JavaScript with strict mode |
-| **Tailwind CSS** | 3.4+ | Utility-first CSS framework |
-| **Jest** | 29+ | Testing framework |
-| **React Testing Library** | 14+ | Component testing |
-| **ESLint** | 8.56+ | Code linting |
-| **Prettier** | 3.2+ | Code formatting |
+| Technology                | Version | Purpose                               |
+| ------------------------- | ------- | ------------------------------------- |
+| **Next.js**               | 14.2+   | React framework with App Router       |
+| **React**                 | 18.3+   | UI library                            |
+| **TypeScript**            | 5.3+    | Type-safe JavaScript with strict mode |
+| **Tailwind CSS**          | 3.4+    | Utility-first CSS framework           |
+| **Jest**                  | 29+     | Testing framework                     |
+| **React Testing Library** | 14+     | Component testing                     |
+| **ESLint**                | 8.56+   | Code linting                          |
+| **Prettier**              | 3.2+    | Code formatting                       |
 
 ## Project Structure
 

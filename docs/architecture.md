@@ -14,9 +14,9 @@ This is a new project built from scratch using `create-next-app` with TypeScript
 
 ### Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-10-28 | 1.0 | Initial architecture document creation | Architect (Winston) |
+| Date       | Version | Description                            | Author              |
+| ---------- | ------- | -------------------------------------- | ------------------- |
+| 2025-10-28 | 1.0     | Initial architecture document creation | Architect (Winston) |
 
 ## High Level Architecture
 
@@ -50,17 +50,17 @@ Since this is a self-contained client-side application with no shared packages o
 graph TB
     User[User Browser] -->|HTTPS| CDN[Vercel CDN/Edge]
     CDN -->|Static Assets| NextApp[Next.js Static App]
-    
+
     NextApp --> UI[React UI Components]
     UI --> State[React State<br/>useState/useEffect]
-    
+
     State -->|Read/Write| Storage[Browser LocalStorage API]
     Storage -->|Persisted| Browser[(Browser Storage<br/>~5-10MB)]
-    
+
     NextApp --> Build[Build Time]
     Build -->|Static Generation| HTML[Static HTML/CSS/JS]
     HTML --> CDN
-    
+
     style Browser fill:#e1f5ff
     style Storage fill:#ffe1e1
     style State fill:#fff4e1
@@ -87,28 +87,28 @@ graph TB
 
 The following table represents the **DEFINITIVE** technology selection for the entire project. All development must use these exact versions and technologies.
 
-| Category | Technology | Version | Purpose | Rationale |
-|----------|-----------|---------|---------|-----------|
-| **Frontend Language** | TypeScript | 5.3+ | Type-safe JavaScript superset | Enables strict type checking (NFR6), catches errors at compile time, provides excellent IDE support, and serves as living documentation |
-| **Frontend Framework** | Next.js | 14.2+ | React framework with App Router | Modern App Router paradigm, built-in optimization, static generation, excellent DX, and Vercel deployment integration |
-| **UI Library** | React | 18.3+ | Component-based UI library | Industry standard, large ecosystem, hooks API for state management, and Next.js requirement |
-| **CSS Framework** | Tailwind CSS | 3.4+ | Utility-first CSS framework | Rapid UI development, built-in responsive design, consistent design tokens, minimal custom CSS, and excellent Next.js integration |
-| **UI Component Library** | None (Custom) | N/A | Build components from scratch | Learning objective to understand component architecture; Tailwind provides sufficient styling primitives |
-| **State Management** | React Hooks | Built-in | Client-side state management | useState/useEffect sufficient for single-view CRUD app; no Redux/Zustand needed per PRD requirements |
-| **Data Storage** | Browser LocalStorage | Native API | Client-side persistence | Meets PRD requirement for session persistence; no backend needed; ~5-10MB quota sufficient for todo data |
-| **ID Generation** | crypto.randomUUID() | Native API | Unique ID generation | Browser-native, no dependencies, cryptographically secure, and simpler than UUID libraries |
-| **Frontend Testing** | Jest + React Testing Library | 29+ / 14+ | Unit and component testing | Industry standard for React testing, excellent Next.js integration, and supports PRD's 70% coverage goal |
-| **E2E Testing** | None (MVP) | N/A | End-to-end testing | Deferred post-MVP per PRD; Jest + RTL sufficient for initial quality |
-| **Type Checking** | TypeScript Compiler | 5.3+ | Static type validation | Enforces strict mode, prevents runtime errors, and validates all code before build |
-| **Linting** | ESLint | 8.56+ | Code quality and standards | Next.js recommended config, catches common errors, enforces consistent style |
-| **Code Formatting** | Prettier | 3.2+ | Automated code formatting | Consistent formatting, integrates with ESLint, reduces code review friction |
-| **Build Tool** | Next.js CLI | 14.2+ | Build and development server | Handles TypeScript compilation, bundling, optimization, and static generation |
-| **Bundler** | Webpack (via Next.js) | 5+ | Module bundling | Next.js default bundler, production-optimized output, tree-shaking, code splitting |
-| **Package Manager** | npm | 10+ | Dependency management | Node.js default, simple for single-package structure, lockfile for reproducible builds |
-| **Node Runtime** | Node.js | 18+ | Development environment | Aligns with Next.js 14 requirements, LTS version, modern JavaScript features |
-| **CI/CD** | Vercel (Auto) | N/A | Continuous deployment | Automatic deployment on git push, preview deployments for PRs, zero configuration |
-| **Monitoring** | Vercel Analytics | Free tier | Basic performance monitoring | Web Vitals tracking, page load metrics, sufficient for learning project |
-| **Error Tracking** | Console + React Error Boundary | Native | Runtime error handling | Built-in error boundaries for graceful degradation; external tools (Sentry) deferred post-MVP |
+| Category                 | Technology                     | Version    | Purpose                         | Rationale                                                                                                                               |
+| ------------------------ | ------------------------------ | ---------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **Frontend Language**    | TypeScript                     | 5.3+       | Type-safe JavaScript superset   | Enables strict type checking (NFR6), catches errors at compile time, provides excellent IDE support, and serves as living documentation |
+| **Frontend Framework**   | Next.js                        | 14.2+      | React framework with App Router | Modern App Router paradigm, built-in optimization, static generation, excellent DX, and Vercel deployment integration                   |
+| **UI Library**           | React                          | 18.3+      | Component-based UI library      | Industry standard, large ecosystem, hooks API for state management, and Next.js requirement                                             |
+| **CSS Framework**        | Tailwind CSS                   | 3.4+       | Utility-first CSS framework     | Rapid UI development, built-in responsive design, consistent design tokens, minimal custom CSS, and excellent Next.js integration       |
+| **UI Component Library** | None (Custom)                  | N/A        | Build components from scratch   | Learning objective to understand component architecture; Tailwind provides sufficient styling primitives                                |
+| **State Management**     | React Hooks                    | Built-in   | Client-side state management    | useState/useEffect sufficient for single-view CRUD app; no Redux/Zustand needed per PRD requirements                                    |
+| **Data Storage**         | Browser LocalStorage           | Native API | Client-side persistence         | Meets PRD requirement for session persistence; no backend needed; ~5-10MB quota sufficient for todo data                                |
+| **ID Generation**        | crypto.randomUUID()            | Native API | Unique ID generation            | Browser-native, no dependencies, cryptographically secure, and simpler than UUID libraries                                              |
+| **Frontend Testing**     | Jest + React Testing Library   | 29+ / 14+  | Unit and component testing      | Industry standard for React testing, excellent Next.js integration, and supports PRD's 70% coverage goal                                |
+| **E2E Testing**          | None (MVP)                     | N/A        | End-to-end testing              | Deferred post-MVP per PRD; Jest + RTL sufficient for initial quality                                                                    |
+| **Type Checking**        | TypeScript Compiler            | 5.3+       | Static type validation          | Enforces strict mode, prevents runtime errors, and validates all code before build                                                      |
+| **Linting**              | ESLint                         | 8.56+      | Code quality and standards      | Next.js recommended config, catches common errors, enforces consistent style                                                            |
+| **Code Formatting**      | Prettier                       | 3.2+       | Automated code formatting       | Consistent formatting, integrates with ESLint, reduces code review friction                                                             |
+| **Build Tool**           | Next.js CLI                    | 14.2+      | Build and development server    | Handles TypeScript compilation, bundling, optimization, and static generation                                                           |
+| **Bundler**              | Webpack (via Next.js)          | 5+         | Module bundling                 | Next.js default bundler, production-optimized output, tree-shaking, code splitting                                                      |
+| **Package Manager**      | npm                            | 10+        | Dependency management           | Node.js default, simple for single-package structure, lockfile for reproducible builds                                                  |
+| **Node Runtime**         | Node.js                        | 18+        | Development environment         | Aligns with Next.js 14 requirements, LTS version, modern JavaScript features                                                            |
+| **CI/CD**                | Vercel (Auto)                  | N/A        | Continuous deployment           | Automatic deployment on git push, preview deployments for PRs, zero configuration                                                       |
+| **Monitoring**           | Vercel Analytics               | Free tier  | Basic performance monitoring    | Web Vitals tracking, page load metrics, sufficient for learning project                                                                 |
+| **Error Tracking**       | Console + React Error Boundary | Native     | Runtime error handling          | Built-in error boundaries for graceful degradation; external tools (Sentry) deferred post-MVP                                           |
 
 ## Data Models
 
@@ -119,12 +119,14 @@ The application has one core data model representing a todo item. This model is 
 **Purpose:** Represents a single todo item with its text content, completion status, and metadata for ordering and identification.
 
 **Key Attributes:**
+
 - `id`: string - Unique identifier generated via `crypto.randomUUID()`
 - `text`: string - The todo item's text content (user-entered)
 - `completed`: boolean - Whether the todo has been marked as complete
 - `createdAt`: number - Unix timestamp (milliseconds) for sorting and display
 
 **Design Decisions:**
+
 - **UUID as string**: Using native `crypto.randomUUID()` provides guaranteed uniqueness without dependencies
 - **Unix timestamp**: Stored as number for efficient sorting and comparison; can be formatted for display as needed
 - **Boolean completion**: Simple true/false rather than enum to minimize complexity
@@ -140,13 +142,13 @@ The application has one core data model representing a todo item. This model is 
 export interface Todo {
   /** Unique identifier (UUID v4) */
   id: string;
-  
+
   /** User-entered todo text content */
   text: string;
-  
+
   /** Whether the todo is marked as complete */
   completed: boolean;
-  
+
   /** Creation timestamp in milliseconds since Unix epoch */
   createdAt: number;
 }
@@ -184,7 +186,7 @@ export const isValidTodoText = (text: string): boolean => {
 export const TODO_CONSTRAINTS = {
   MIN_TEXT_LENGTH: 1,
   MAX_TEXT_LENGTH: 500,
-  STORAGE_KEY: 'todos'
+  STORAGE_KEY: 'todos',
 } as const;
 ```
 
@@ -197,19 +199,19 @@ The application follows a component-based architecture with clear separation of 
 ```mermaid
 graph TD
     Page[app/page.tsx<br/>Root Page] --> TodoApp[TodoApp Component<br/>Main Container]
-    
+
     TodoApp --> TodoInput[TodoInput Component<br/>Add new todos]
     TodoApp --> TodoList[TodoList Component<br/>Display todos]
     TodoApp --> Toast[Toast Component<br/>Error notifications]
     TodoApp --> EmptyState[EmptyState Component<br/>No todos view]
-    
+
     TodoList --> TodoItem[TodoItem Component<br/>Individual todo]
-    
+
     TodoApp --> Storage[localStorage Service<br/>Data persistence]
     TodoApp --> Hooks[Custom Hooks<br/>useTodos, useLocalStorage]
-    
+
     Storage --> LocalStorageAPI[Browser localStorage API]
-    
+
     style TodoApp fill:#e8f5e8
     style Storage fill:#ffe1e1
     style Hooks fill:#fff4e1
@@ -220,6 +222,7 @@ graph TD
 **Responsibility:** Root application component that manages global todo state, coordinates all child components, and handles data persistence through the storage service layer.
 
 **Key Interfaces:**
+
 - Exports: React component (default export)
 - Props: None (root component)
 - State: `todos: Todo[]`, `error: string | null`
@@ -229,6 +232,7 @@ graph TD
 **Technology Stack:** React 18 Client Component (`'use client'`), TypeScript, Tailwind CSS for layout
 
 **Key Responsibilities:**
+
 - Initialize todos from localStorage on mount
 - Provide CRUD operations to child components via callbacks
 - Handle errors and display toast notifications
@@ -239,6 +243,7 @@ graph TD
 **Responsibility:** Input field and submit button for adding new todos. Handles text input validation and Enter key submission.
 
 **Key Interfaces:**
+
 - Props: `onAddTodo: (text: string) => void`
 - Emits: `onAddTodo` callback with validated text
 - Internal state: `inputValue: string`
@@ -248,6 +253,7 @@ graph TD
 **Technology Stack:** React controlled input, Tailwind CSS, TypeScript
 
 **Key Responsibilities:**
+
 - Validate input (non-empty, max 500 chars)
 - Handle Enter key and button click submission
 - Clear input after successful submission
@@ -258,6 +264,7 @@ graph TD
 **Responsibility:** Renders a list of TodoItem components. Handles sorting and provides callbacks to child items.
 
 **Key Interfaces:**
+
 - Props: `todos: Todo[]`, `onToggleTodo: (id: string) => void`, `onEditTodo: (id: string, text: string) => void`, `onDeleteTodo: (id: string) => void`
 - Renders: Array of TodoItem components
 
@@ -266,6 +273,7 @@ graph TD
 **Technology Stack:** React, Array.map() for rendering, Tailwind CSS for list styling
 
 **Key Responsibilities:**
+
 - Sort todos by createdAt (newest first)
 - Pass appropriate callbacks to each TodoItem
 - Handle empty array case gracefully
@@ -275,6 +283,7 @@ graph TD
 **Responsibility:** Displays a single todo with checkbox, text, edit, and delete buttons. Manages inline editing state.
 
 **Key Interfaces:**
+
 - Props: `todo: Todo`, `onToggle: () => void`, `onEdit: (text: string) => void`, `onDelete: () => void`
 - Internal state: `isEditing: boolean`, `editText: string`
 
@@ -283,6 +292,7 @@ graph TD
 **Technology Stack:** React, Tailwind CSS with hover states, inline edit mode
 
 **Key Responsibilities:**
+
 - Display todo text with strikethrough if completed
 - Toggle completion status via checkbox
 - Enter edit mode on edit button click
@@ -295,6 +305,7 @@ graph TD
 **Responsibility:** Non-intrusive notification system for displaying error messages and success feedback.
 
 **Key Interfaces:**
+
 - Props: `message: string | null`, `type: 'error' | 'success' | 'info'`, `onDismiss: () => void`
 - Auto-dismiss: Timer to clear after 5 seconds
 
@@ -303,6 +314,7 @@ graph TD
 **Technology Stack:** React, Tailwind CSS animations, conditional rendering
 
 **Key Responsibilities:**
+
 - Display message with appropriate styling based on type
 - Auto-dismiss after 5 seconds
 - Provide manual dismiss button
@@ -313,6 +325,7 @@ graph TD
 **Responsibility:** Welcoming view when no todos exist, encouraging users to add their first todo.
 
 **Key Interfaces:**
+
 - Props: None (pure presentational)
 
 **Dependencies:** None
@@ -320,6 +333,7 @@ graph TD
 **Technology Stack:** React, Tailwind CSS, possibly an SVG icon
 
 **Key Responsibilities:**
+
 - Display encouraging message
 - Provide visual indicator (icon or illustration)
 - Match overall app aesthetic
@@ -329,6 +343,7 @@ graph TD
 **Responsibility:** Type-safe wrapper around browser localStorage API for reading/writing todo data with error handling.
 
 **Key Interfaces:**
+
 ```typescript
 export const todoStorage = {
   loadTodos: (): Todo[] => { ... },
@@ -342,6 +357,7 @@ export const todoStorage = {
 **Technology Stack:** TypeScript, native localStorage API, JSON serialization
 
 **Key Responsibilities:**
+
 - Serialize/deserialize Todo[] to/from JSON
 - Handle localStorage unavailable/disabled scenarios
 - Handle JSON parse errors gracefully
@@ -353,6 +369,7 @@ export const todoStorage = {
 **Responsibility:** Encapsulates todo management logic including CRUD operations and localStorage synchronization.
 
 **Key Interfaces:**
+
 ```typescript
 export function useTodos() {
   return {
@@ -372,6 +389,7 @@ export function useTodos() {
 **Technology Stack:** React Hooks, TypeScript
 
 **Key Responsibilities:**
+
 - Manage todos array state
 - Provide CRUD operation functions
 - Sync state changes to localStorage
@@ -594,8 +612,8 @@ The application uses **local component state** with **React hooks** for state ma
 ```typescript
 // TodoApp component state (top level)
 interface TodoAppState {
-  todos: Todo[];           // Managed by useTodos hook
-  error: string | null;    // Managed by useTodos hook
+  todos: Todo[]; // Managed by useTodos hook
+  error: string | null; // Managed by useTodos hook
 }
 
 // TodoItem component state (component level)
@@ -642,7 +660,10 @@ import type { Todo } from '@/types/todo';
 import { TODO_CONSTRAINTS } from '@/types/todo';
 
 export class StorageError extends Error {
-  constructor(message: string, public code: string) {
+  constructor(
+    message: string,
+    public code: string
+  ) {
     super(message);
     this.name = 'StorageError';
   }
@@ -659,7 +680,7 @@ export const todoStorage = {
       if (!data) return [];
 
       const parsed = JSON.parse(data);
-      
+
       // Validate structure
       if (!Array.isArray(parsed)) {
         console.warn('Invalid todos data structure, resetting');
@@ -700,7 +721,7 @@ export const todoStorage = {
     } catch (error) {
       console.error('Error clearing todos:', error);
     }
-  }
+  },
 };
 ```
 
@@ -741,7 +762,7 @@ export function useTodos() {
       id: crypto.randomUUID(),
       text: text.trim(),
       completed: false,
-      createdAt: Date.now()
+      createdAt: Date.now(),
     };
 
     const updatedTodos = [newTodo, ...todos];
@@ -758,9 +779,7 @@ export function useTodos() {
   };
 
   const updateTodo = (id: string, updates: UpdateTodoInput) => {
-    const updatedTodos = todos.map(todo =>
-      todo.id === id ? { ...todo, ...updates } : todo
-    );
+    const updatedTodos = todos.map((todo) => (todo.id === id ? { ...todo, ...updates } : todo));
     setTodos(updatedTodos);
 
     try {
@@ -773,7 +792,7 @@ export function useTodos() {
   };
 
   const deleteTodo = (id: string) => {
-    const updatedTodos = todos.filter(todo => todo.id !== id);
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
     setTodos(updatedTodos);
 
     try {
@@ -786,7 +805,7 @@ export function useTodos() {
   };
 
   const toggleTodo = (id: string) => {
-    const todo = todos.find(t => t.id === id);
+    const todo = todos.find((t) => t.id === id);
     if (todo) {
       updateTodo(id, { completed: !todo.completed });
     }
@@ -801,7 +820,7 @@ export function useTodos() {
     deleteTodo,
     toggleTodo,
     error,
-    clearError
+    clearError,
   };
 }
 ```
@@ -934,11 +953,11 @@ describe('TodoInput', () => {
   it('should call onAddTodo with trimmed text on Enter key', () => {
     const mockOnAdd = jest.fn();
     render(<TodoInput onAddTodo={mockOnAdd} />);
-    
+
     const input = screen.getByRole('textbox');
     fireEvent.change(input, { target: { value: '  Buy milk  ' } });
     fireEvent.keyDown(input, { key: 'Enter' });
-    
+
     expect(mockOnAdd).toHaveBeenCalledWith('Buy milk');
     expect(input).toHaveValue(''); // Input cleared
   });
@@ -946,24 +965,24 @@ describe('TodoInput', () => {
   it('should not call onAddTodo with empty text', () => {
     const mockOnAdd = jest.fn();
     render(<TodoInput onAddTodo={mockOnAdd} />);
-    
+
     const input = screen.getByRole('textbox');
     fireEvent.change(input, { target: { value: '   ' } });
     fireEvent.keyDown(input, { key: 'Enter' });
-    
+
     expect(mockOnAdd).not.toHaveBeenCalled();
   });
 
   it('should call onAddTodo when Add button is clicked', () => {
     const mockOnAdd = jest.fn();
     render(<TodoInput onAddTodo={mockOnAdd} />);
-    
+
     const input = screen.getByRole('textbox');
     const button = screen.getByRole('button', { name: /add/i });
-    
+
     fireEvent.change(input, { target: { value: 'New task' } });
     fireEvent.click(button);
-    
+
     expect(mockOnAdd).toHaveBeenCalledWith('New task');
   });
 });
@@ -982,8 +1001,8 @@ describe('todoStorage', () => {
       id: '1',
       text: 'Test todo',
       completed: false,
-      createdAt: Date.now()
-    }
+      createdAt: Date.now(),
+    },
   ];
 
   beforeEach(() => {
@@ -993,7 +1012,7 @@ describe('todoStorage', () => {
   describe('saveTodos', () => {
     it('should save todos to localStorage', () => {
       todoStorage.saveTodos(mockTodos);
-      
+
       const stored = localStorage.getItem('todos');
       expect(stored).not.toBeNull();
       expect(JSON.parse(stored!)).toEqual(mockTodos);
@@ -1003,12 +1022,12 @@ describe('todoStorage', () => {
       // Mock quota exceeded error
       const setItemSpy = jest.spyOn(Storage.prototype, 'setItem');
       const quotaError = new DOMException('Quota exceeded', 'QuotaExceededError');
-      setItemSpy.mockImplementation(() => { throw quotaError; });
+      setItemSpy.mockImplementation(() => {
+        throw quotaError;
+      });
 
-      expect(() => todoStorage.saveTodos(mockTodos))
-        .toThrow(StorageError);
-      expect(() => todoStorage.saveTodos(mockTodos))
-        .toThrow(/quota exceeded/i);
+      expect(() => todoStorage.saveTodos(mockTodos)).toThrow(StorageError);
+      expect(() => todoStorage.saveTodos(mockTodos)).toThrow(/quota exceeded/i);
 
       setItemSpy.mockRestore();
     });
@@ -1017,7 +1036,7 @@ describe('todoStorage', () => {
   describe('loadTodos', () => {
     it('should load todos from localStorage', () => {
       localStorage.setItem('todos', JSON.stringify(mockTodos));
-      
+
       const loaded = todoStorage.loadTodos();
       expect(loaded).toEqual(mockTodos);
     });
@@ -1029,7 +1048,7 @@ describe('todoStorage', () => {
 
     it('should return empty array on invalid JSON', () => {
       localStorage.setItem('todos', 'invalid json');
-      
+
       const loaded = todoStorage.loadTodos();
       expect(loaded).toEqual([]);
     });
@@ -1055,11 +1074,11 @@ describe('useTodos', () => {
 
   it('should add a new todo', () => {
     const { result } = renderHook(() => useTodos());
-    
+
     act(() => {
       result.current.addTodo('New task');
     });
-    
+
     expect(result.current.todos).toHaveLength(1);
     expect(result.current.todos[0].text).toBe('New task');
     expect(result.current.todos[0].completed).toBe(false);
@@ -1067,33 +1086,33 @@ describe('useTodos', () => {
 
   it('should toggle todo completion', () => {
     const { result } = renderHook(() => useTodos());
-    
+
     act(() => {
       result.current.addTodo('Task to complete');
     });
-    
+
     const todoId = result.current.todos[0].id;
-    
+
     act(() => {
       result.current.toggleTodo(todoId);
     });
-    
+
     expect(result.current.todos[0].completed).toBe(true);
   });
 
   it('should delete a todo', () => {
     const { result } = renderHook(() => useTodos());
-    
+
     act(() => {
       result.current.addTodo('Task to delete');
     });
-    
+
     const todoId = result.current.todos[0].id;
-    
+
     act(() => {
       result.current.deleteTodo(todoId);
     });
-    
+
     expect(result.current.todos).toHaveLength(0);
   });
 });
@@ -1120,16 +1139,16 @@ These rules prevent common mistakes and ensure consistency. **All code must foll
 
 ### Naming Conventions
 
-| Element | Convention | Example |
-|---------|-----------|---------|
-| Components | PascalCase | `TodoItem.tsx` |
-| Hooks | camelCase with 'use' prefix | `useTodos.ts` |
-| Utilities | camelCase | `validation.ts` |
-| Types/Interfaces | PascalCase | `Todo`, `TodoItemProps` |
-| Constants | UPPER_SNAKE_CASE | `TODO_CONSTRAINTS` |
-| Functions | camelCase | `addTodo`, `isValidTodoText` |
-| Variables | camelCase | `todoList`, `isEditing` |
-| CSS Classes | Tailwind utilities | `flex items-center gap-2` |
+| Element          | Convention                  | Example                      |
+| ---------------- | --------------------------- | ---------------------------- |
+| Components       | PascalCase                  | `TodoItem.tsx`               |
+| Hooks            | camelCase with 'use' prefix | `useTodos.ts`                |
+| Utilities        | camelCase                   | `validation.ts`              |
+| Types/Interfaces | PascalCase                  | `Todo`, `TodoItemProps`      |
+| Constants        | UPPER_SNAKE_CASE            | `TODO_CONSTRAINTS`           |
+| Functions        | camelCase                   | `addTodo`, `isValidTodoText` |
+| Variables        | camelCase                   | `todoList`, `isEditing`      |
+| CSS Classes      | Tailwind utilities          | `flex items-center gap-2`    |
 
 ## Error Handling Strategy
 
@@ -1175,7 +1194,7 @@ export const ERROR_MESSAGES = {
   UNAVAILABLE: 'Storage is not available. Your todos will not be saved.',
   QUOTA_EXCEEDED: 'Storage limit reached. Please delete some todos to free up space.',
   SAVE_ERROR: 'Failed to save your changes. Please try again.',
-  LOAD_ERROR: 'Failed to load your todos. Please refresh the page.'
+  LOAD_ERROR: 'Failed to load your todos. Please refresh the page.',
 } as const;
 ```
 
@@ -1188,15 +1207,16 @@ try {
   setError(null);
 } catch (err) {
   // User-friendly message
-  const message = err instanceof StorageError 
-    ? ERROR_MESSAGES[err.code] || err.message
-    : 'An unexpected error occurred';
-  
+  const message =
+    err instanceof StorageError
+      ? ERROR_MESSAGES[err.code] || err.message
+      : 'An unexpected error occurred';
+
   setError(message);
-  
+
   // Rollback optimistic update
   setTodos(previousTodos);
-  
+
   // Log for debugging
   console.error('Storage operation failed:', err);
 }
@@ -1245,6 +1265,7 @@ export default function Error({
 ### Deployment Strategy
 
 **Frontend Deployment:**
+
 - **Platform:** Vercel
 - **Build Command:** `npm run build`
 - **Output Directory:** `.next` (automatic)
@@ -1252,6 +1273,7 @@ export default function Error({
 - **Static Generation:** Next.js builds static HTML at build time
 
 **Deployment Process:**
+
 1. Push code to GitHub repository
 2. Vercel automatically detects changes (via GitHub integration)
 3. Runs `npm run build` to generate static assets
@@ -1269,38 +1291,38 @@ name: CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run linter
         run: npm run lint
-      
+
       - name: Run type check
         run: npm run type-check
-      
+
       - name: Run tests
         run: npm run test:coverage
-      
+
       - name: Build
         run: npm run build
-      
+
       - name: Upload coverage
         uses: codecov/codecov-action@v3
         with:
@@ -1309,30 +1331,32 @@ jobs:
 
 ### Environments
 
-| Environment | Frontend URL | Purpose | Deployment |
-|-------------|-------------|---------|------------|
-| Development | `http://localhost:3000` | Local development | Manual (npm run dev) |
-| Preview | `https://<branch>-todo-app.vercel.app` | PR previews and testing | Automatic on PR |
-| Production | `https://todo-app.vercel.app` | Live application | Automatic on merge to main |
+| Environment | Frontend URL                           | Purpose                 | Deployment                 |
+| ----------- | -------------------------------------- | ----------------------- | -------------------------- |
+| Development | `http://localhost:3000`                | Local development       | Manual (npm run dev)       |
+| Preview     | `https://<branch>-todo-app.vercel.app` | PR previews and testing | Automatic on PR            |
+| Production  | `https://todo-app.vercel.app`          | Live application        | Automatic on merge to main |
 
 ## Security and Performance
 
 ### Security Requirements
 
 **Frontend Security:**
+
 - **CSP Headers:** Configure Content Security Policy in `next.config.js` to prevent XSS attacks
   ```javascript
   const securityHeaders = [
     {
       key: 'Content-Security-Policy',
-      value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline';"
-    }
+      value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline';",
+    },
   ];
   ```
 - **XSS Prevention:** React's built-in XSS protection via JSX escaping; never use `dangerouslySetInnerHTML`
 - **Secure Storage:** Use localStorage only for non-sensitive data; todos are not sensitive but validate all data on load
 
 **Client-Side Security:**
+
 - **Input Validation:** Validate all user input before processing (max length, trim whitespace)
 - **Data Validation:** Validate data structure when loading from localStorage to prevent injection
 - **Error Messages:** Never expose technical details in error messages shown to users
@@ -1340,22 +1364,26 @@ jobs:
 ### Performance Optimization
 
 **Frontend Performance:**
+
 - **Bundle Size Target:** < 200KB initial JavaScript bundle (gzipped)
 - **Loading Strategy:** Static generation with client-side hydration for instant loads
 - **Caching Strategy:** Leverage Vercel CDN for static assets with immutable caching
 
 **React Performance:**
+
 - **Component Memoization:** Use `React.memo` for TodoItem to prevent unnecessary re-renders
 - **Callback Memoization:** Use `useCallback` for event handlers passed to child components
 - **List Rendering:** Use proper `key` prop (todo.id) for efficient list updates
 
 **Performance Metrics:**
+
 - **Target Lighthouse Score:** 90+ for Performance, Accessibility, Best Practices, SEO
 - **First Contentful Paint:** < 1.5s
 - **Time to Interactive:** < 2s (meets NFR2)
 - **Total Blocking Time:** < 200ms
 
 **Optimization Techniques:**
+
 ```typescript
 // Memoize TodoItem to prevent re-renders
 export const TodoItem = React.memo(({ todo, onToggle, onEdit, onDelete }: TodoItemProps) => {
@@ -1363,13 +1391,19 @@ export const TodoItem = React.memo(({ todo, onToggle, onEdit, onDelete }: TodoIt
 });
 
 // Memoize callbacks in TodoApp
-const handleToggle = useCallback((id: string) => {
-  toggleTodo(id);
-}, [toggleTodo]);
+const handleToggle = useCallback(
+  (id: string) => {
+    toggleTodo(id);
+  },
+  [toggleTodo]
+);
 
-const handleDelete = useCallback((id: string) => {
-  deleteTodo(id);
-}, [deleteTodo]);
+const handleDelete = useCallback(
+  (id: string) => {
+    deleteTodo(id);
+  },
+  [deleteTodo]
+);
 ```
 
 ## Deployment Configuration Examples
@@ -1381,7 +1415,7 @@ const handleDelete = useCallback((id: string) => {
 const nextConfig = {
   output: 'export', // Static export for client-side only app
   images: {
-    unoptimized: true // Required for static export
+    unoptimized: true, // Required for static export
   },
   // Security headers
   async headers() {
@@ -1391,20 +1425,20 @@ const nextConfig = {
         headers: [
           {
             key: 'X-DNS-Prefetch-Control',
-            value: 'on'
+            value: 'on',
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            value: 'SAMEORIGIN',
           },
           {
             key: 'X-Content-Type-Options',
-            value: 'nosniff'
-          }
-        ]
-      }
+            value: 'nosniff',
+          },
+        ],
+      },
     ];
-  }
+  },
 };
 
 module.exports = nextConfig;
@@ -1464,22 +1498,22 @@ Before finalizing this architecture document, let's evaluate its completeness an
 
 ### Category Analysis
 
-| Category | Status | Notes |
-|----------|--------|-------|
-| **System Architecture** | ✅ COMPLETE | Clear Jamstack architecture with client-side focus |
-| **Tech Stack Selection** | ✅ COMPLETE | All technologies selected with versions and rationale |
-| **Data Models** | ✅ COMPLETE | Todo model fully defined with TypeScript interfaces |
-| **Component Architecture** | ✅ COMPLETE | All 7 components defined with clear responsibilities |
-| **State Management** | ✅ COMPLETE | Hooks-based approach with useTodos custom hook |
-| **Data Flow** | ✅ COMPLETE | Sequence diagrams for key workflows |
-| **Project Structure** | ✅ COMPLETE | Complete file/folder layout with Next.js 14 conventions |
-| **Testing Strategy** | ✅ COMPLETE | Pyramid defined with example tests for each layer |
-| **Development Workflow** | ✅ COMPLETE | Setup instructions, commands, and local dev process |
-| **Deployment** | ✅ COMPLETE | Vercel deployment with CI/CD pipeline |
-| **Security** | ✅ COMPLETE | CSP headers, XSS prevention, input validation |
-| **Performance** | ✅ COMPLETE | Optimization strategies and target metrics |
-| **Error Handling** | ✅ COMPLETE | Standardized error flow with user-friendly messages |
-| **Coding Standards** | ✅ COMPLETE | Critical rules and naming conventions for AI agents |
+| Category                   | Status      | Notes                                                   |
+| -------------------------- | ----------- | ------------------------------------------------------- |
+| **System Architecture**    | ✅ COMPLETE | Clear Jamstack architecture with client-side focus      |
+| **Tech Stack Selection**   | ✅ COMPLETE | All technologies selected with versions and rationale   |
+| **Data Models**            | ✅ COMPLETE | Todo model fully defined with TypeScript interfaces     |
+| **Component Architecture** | ✅ COMPLETE | All 7 components defined with clear responsibilities    |
+| **State Management**       | ✅ COMPLETE | Hooks-based approach with useTodos custom hook          |
+| **Data Flow**              | ✅ COMPLETE | Sequence diagrams for key workflows                     |
+| **Project Structure**      | ✅ COMPLETE | Complete file/folder layout with Next.js 14 conventions |
+| **Testing Strategy**       | ✅ COMPLETE | Pyramid defined with example tests for each layer       |
+| **Development Workflow**   | ✅ COMPLETE | Setup instructions, commands, and local dev process     |
+| **Deployment**             | ✅ COMPLETE | Vercel deployment with CI/CD pipeline                   |
+| **Security**               | ✅ COMPLETE | CSP headers, XSS prevention, input validation           |
+| **Performance**            | ✅ COMPLETE | Optimization strategies and target metrics              |
+| **Error Handling**         | ✅ COMPLETE | Standardized error flow with user-friendly messages     |
+| **Coding Standards**       | ✅ COMPLETE | Critical rules and naming conventions for AI agents     |
 
 ### Key Strengths
 
@@ -1549,9 +1583,3 @@ Before finalizing this architecture document, let's evaluate its completeness an
 ---
 
 **Document End**
-
-
-
-
-
-
