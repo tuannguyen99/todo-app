@@ -94,7 +94,7 @@ describe('TodoItem', () => {
       );
 
       const text = screen.getByText(completedTodo.text);
-      expect(text).toHaveClass('text-gray-500');
+      expect(text).toHaveClass('text-gray-400');
     });
 
     it('should not have strikethrough when todo is not completed', () => {
@@ -109,7 +109,7 @@ describe('TodoItem', () => {
 
       const text = screen.getByText(mockTodo.text);
       expect(text).not.toHaveClass('line-through');
-      expect(text).toHaveClass('text-gray-900');
+      expect(text).toHaveClass('text-gray-800');
     });
 
     it('should have proper ARIA label for checkbox', () => {

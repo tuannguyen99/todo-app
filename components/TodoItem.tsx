@@ -50,12 +50,12 @@ export function TodoItem({ todo, onToggle, onEdit, onDelete }: TodoItemProps) {
   };
 
   return (
-    <div className="flex items-center gap-3 p-3 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors">
+    <div className="flex items-center gap-4 p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200">
       <input
         type="checkbox"
         checked={todo.completed}
         onChange={onToggle}
-        className="w-5 h-5 rounded border-gray-300 text-blue-500 focus:ring-2 focus:ring-blue-500"
+        className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
         aria-label={`Mark "${todo.text}" as ${todo.completed ? 'incomplete' : 'complete'}`}
       />
       {isEditing ? (
@@ -65,17 +65,17 @@ export function TodoItem({ todo, onToggle, onEdit, onDelete }: TodoItemProps) {
           onChange={(e) => setEditText(e.target.value)}
           onKeyDown={handleKeyDown}
           onBlur={handleCancel}
-          className="flex-1 px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 px-3 py-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
           autoFocus
           aria-label="Edit todo text"
         />
       ) : (
         <span
           onDoubleClick={() => setIsEditing(true)}
-          className={`flex-1 cursor-pointer ${
+          className={`flex-1 cursor-pointer text-base ${
             todo.completed
-              ? 'line-through text-gray-500'
-              : 'text-gray-900'
+              ? 'line-through text-gray-400'
+              : 'text-gray-800'
           }`}
           role="button"
           tabIndex={0}
@@ -92,7 +92,7 @@ export function TodoItem({ todo, onToggle, onEdit, onDelete }: TodoItemProps) {
       )}
       <button
         onClick={onDelete}
-        className="px-3 py-1 text-red-600 hover:bg-red-50 rounded text-sm transition-colors"
+        className="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 rounded-lg transition-all duration-150 border border-transparent hover:border-red-200"
         aria-label={`Delete "${todo.text}"`}
       >
         Delete

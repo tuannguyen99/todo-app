@@ -51,6 +51,11 @@ export const isStorageAvailable = (): boolean => {
  * @throws {StorageError} When storage is unavailable, quota is exceeded, or save fails
  */
 export const saveTodos = (todos: Todo[], key: string = TODO_CONSTRAINTS.STORAGE_KEY): void => {
+  // Check storage availability first
+  if (!isStorageAvailable()) {
+    throw new StorageError(ERROR_MESSAGES.UNAVAILABLE, 'UNAVAILABLE');
+  }
+
   try {
     const serialized = JSON.stringify(todos);
     localStorage.setItem(key, serialized);
@@ -58,14 +63,12 @@ export const saveTodos = (todos: Todo[], key: string = TODO_CONSTRAINTS.STORAGE_
     // Check for quota exceeded error
     if (
       error instanceof DOMException &&
-      (error.name === 'QuotaExceededError' || error.code === 22)
+      (error.name === 'QuotaExceededError' || 
+       error.code === 22 || 
+       error.code === 1014 || // Firefox
+       error.name === 'NS_ERROR_DOM_QUOTA_REACHED') // Firefox alternate
     ) {
       throw new StorageError(ERROR_MESSAGES.QUOTA_EXCEEDED, 'QUOTA_EXCEEDED');
-    }
-
-    // Check if storage is unavailable
-    if (!isStorageAvailable()) {
-      throw new StorageError(ERROR_MESSAGES.UNAVAILABLE, 'UNAVAILABLE');
     }
 
     throw new StorageError(ERROR_MESSAGES.SAVE_ERROR, 'SAVE_ERROR');
@@ -78,6 +81,11 @@ export const saveTodos = (todos: Todo[], key: string = TODO_CONSTRAINTS.STORAGE_
  * @returns Array of todo items, or empty array if no data exists or on error
  */
 export const loadTodos = (key: string = TODO_CONSTRAINTS.STORAGE_KEY): Todo[] => {
+  // Return empty array if storage is unavailable
+  if (!isStorageAvailable()) {
+    return [];
+  }
+
   try {
     const stored = localStorage.getItem(key);
     if (!stored) {
@@ -88,18 +96,37 @@ export const loadTodos = (key: string = TODO_CONSTRAINTS.STORAGE_KEY): Todo[] =>
 
     // Validate structure - should be an array
     if (!Array.isArray(parsed)) {
+      console.warn('Invalid todo data structure in storage, returning empty array');
       return [];
     }
 
-    return parsed as Todo[];
+    // Validate each todo has required fields
+    const validTodos = parsed.filter((todo: any) => {
+      return (
+        todo &&
+        typeof todo === 'object' &&
+        typeof todo.id === 'string' &&
+        typeof todo.text === 'string' &&
+        typeof todo.completed === 'boolean' &&
+        typeof todo.createdAt === 'number'
+      );
+    });
+
+    if (validTodos.length !== parsed.length) {
+      console.warn('Some todos were filtered out due to invalid structure');
+    }
+
+    return validTodos as Todo[];
   } catch (error) {
     // JSON parse errors should return empty array (graceful degradation)
     if (error instanceof SyntaxError) {
+      console.error('Failed to parse todo data from storage, returning empty array');
       return [];
     }
 
     // For any other errors, return empty array for graceful degradation
     // This ensures the app remains functional even when storage is unavailable
+    console.error('Error loading todos from storage:', error);
     return [];
   }
 };

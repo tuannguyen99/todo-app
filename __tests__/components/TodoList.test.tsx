@@ -119,7 +119,7 @@ describe('TodoList', () => {
     );
 
     const list = container.querySelector('ul');
-    expect(list).toHaveClass('space-y-2');
+    expect(list).toHaveClass('space-y-3');
   });
 
   it('should not mutate the original todos array', () => {

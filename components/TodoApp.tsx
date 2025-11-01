@@ -3,6 +3,7 @@
 import { TodoInput } from '@/components/TodoInput';
 import { TodoList } from '@/components/TodoList';
 import { EmptyState } from '@/components/EmptyState';
+import { TodoStats } from '@/components/TodoStats';
 import { useTodos } from '@/lib/hooks/useTodos';
 
 /**
@@ -15,17 +16,18 @@ export function TodoApp() {
   const { todos, addTodo, updateTodo, deleteTodo, toggleTodo, error, clearError } = useTodos();
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-2xl mx-auto px-4">
-        <header className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 text-center">Todo List</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12">
+      <div className="max-w-3xl mx-auto px-4">
+        <header className="mb-10">
+          <h1 className="text-5xl font-bold text-gray-900 text-center mb-2">Todo List</h1>
+          <p className="text-center text-gray-600">Stay organized and productive</p>
         </header>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white rounded-2xl shadow-lg p-8">
           <TodoInput onAddTodo={addTodo} />
 
           {error && (
-            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg shadow-sm">
               {error}
               <button
                 onClick={clearError}
@@ -40,12 +42,15 @@ export function TodoApp() {
           {todos.length === 0 ? (
             <EmptyState />
           ) : (
-            <TodoList
-              todos={todos}
-              onToggleTodo={toggleTodo}
-              onEditTodo={(id, text) => updateTodo(id, { text })}
-              onDeleteTodo={deleteTodo}
-            />
+            <>
+              <TodoStats todos={todos} />
+              <TodoList
+                todos={todos}
+                onToggleTodo={toggleTodo}
+                onEditTodo={(id, text) => updateTodo(id, { text })}
+                onDeleteTodo={deleteTodo}
+              />
+            </>
           )}
         </div>
       </div>

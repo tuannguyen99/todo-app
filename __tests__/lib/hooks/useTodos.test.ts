@@ -51,7 +51,7 @@ describe('useTodos', () => {
 
       const { result } = renderHook(() => useTodos());
 
-      expect(result.current.error).toBe('Storage is not available. Your todos will not be saved.');
+      expect(result.current.error).toBe('Storage unavailable');
     });
 
     it('should set generic error for other load errors', () => {
@@ -61,7 +61,7 @@ describe('useTodos', () => {
 
       const { result } = renderHook(() => useTodos());
 
-      expect(result.current.error).toBe('Failed to load todos.');
+      expect(result.current.error).toBe('Failed to load todos. The app will work, but your todos may not be saved.');
     });
   });
 

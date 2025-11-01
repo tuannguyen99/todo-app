@@ -20,16 +20,17 @@ export function useTodos() {
     try {
       const loadedTodos = todoStorage.loadTodos();
       setTodos(loadedTodos);
+      // Clear any previous errors on successful load
+      setError(null);
     } catch (err) {
+      // Handle storage errors gracefully
       if (err instanceof todoStorage.StorageError) {
-        if (err.code === 'UNAVAILABLE') {
-          setError('Storage is not available. Your todos will not be saved.');
-        } else {
-          setError(err.message);
-        }
+        setError(err.message);
       } else {
-        setError('Failed to load todos.');
+        setError('Failed to load todos. The app will work, but your todos may not be saved.');
       }
+      // Start with empty todos array on error
+      setTodos([]);
     }
   }, []);
 

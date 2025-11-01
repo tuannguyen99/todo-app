@@ -87,9 +87,19 @@ describe('todoStorage', () => {
     });
 
     it('should throw StorageError with QUOTA_EXCEEDED code when quota is exceeded', () => {
+      // Mock isStorageAvailable to return true first
+      const getItemSpy = jest.spyOn(Storage.prototype, 'getItem');
+      const removeItemSpy = jest.spyOn(Storage.prototype, 'removeItem');
+      getItemSpy.mockReturnValue('test');
+      removeItemSpy.mockImplementation(() => {});
+      
       setItemSpy = jest.spyOn(Storage.prototype, 'setItem');
       const quotaError = new DOMException('Quota exceeded', 'QuotaExceededError');
-      setItemSpy.mockImplementation(() => {
+      setItemSpy.mockImplementation((key: string) => {
+        // Allow the storage availability check to pass
+        if (key === '__storage_test__') {
+          return;
+        }
         throw quotaError;
       });
 
@@ -102,6 +112,9 @@ describe('todoStorage', () => {
         expect(error).toBeInstanceOf(StorageError);
         expect((error as StorageError).code).toBe('QUOTA_EXCEEDED');
       }
+      
+      getItemSpy.mockRestore();
+      removeItemSpy.mockRestore();
 
       setItemSpy.mockRestore();
       setItemSpy = null;

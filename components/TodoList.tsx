@@ -29,7 +29,7 @@ export function TodoList({ todos, onToggleTodo, onEditTodo, onDeleteTodo }: Todo
   const sortedTodos = [...todos].sort((a, b) => b.createdAt - a.createdAt);
 
   return (
-    <ul className="space-y-2">
+    <ul className="space-y-3">
       {sortedTodos.map((todo) => (
         <li key={todo.id}>
           <TodoItem
