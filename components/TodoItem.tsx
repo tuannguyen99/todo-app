@@ -49,38 +49,6 @@ export function TodoItem({ todo, onToggle, onEdit, onDelete }: TodoItemProps) {
     }
   };
 
-  if (isEditing) {
-    // Edit mode
-    return (
-      <div className="flex items-center gap-2 p-3 bg-white rounded border border-blue-300">
-        <input
-          type="text"
-          value={editText}
-          onChange={(e) => setEditText(e.target.value)}
-          onKeyDown={handleKeyDown}
-          className="flex-1 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          autoFocus
-          aria-label="Edit todo text"
-        />
-        <button
-          onClick={handleSave}
-          className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm"
-          aria-label="Save changes"
-        >
-          Save
-        </button>
-        <button
-          onClick={handleCancel}
-          className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 text-sm"
-          aria-label="Cancel editing"
-        >
-          Cancel
-        </button>
-      </div>
-    );
-  }
-
-  // Display mode
   return (
     <div className="flex items-center gap-3 p-3 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors">
       <input
@@ -90,22 +58,38 @@ export function TodoItem({ todo, onToggle, onEdit, onDelete }: TodoItemProps) {
         className="w-5 h-5 rounded border-gray-300 text-blue-500 focus:ring-2 focus:ring-blue-500"
         aria-label={`Mark "${todo.text}" as ${todo.completed ? 'incomplete' : 'complete'}`}
       />
-      <span
-        className={`flex-1 ${
-          todo.completed
-            ? 'line-through text-gray-500'
-            : 'text-gray-900'
-        }`}
-      >
-        {todo.text}
-      </span>
-      <button
-        onClick={() => setIsEditing(true)}
-        className="px-3 py-1 text-blue-600 hover:bg-blue-50 rounded text-sm transition-colors"
-        aria-label={`Edit "${todo.text}"`}
-      >
-        Edit
-      </button>
+      {isEditing ? (
+        <input
+          type="text"
+          value={editText}
+          onChange={(e) => setEditText(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onBlur={handleCancel}
+          className="flex-1 px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          autoFocus
+          aria-label="Edit todo text"
+        />
+      ) : (
+        <span
+          onDoubleClick={() => setIsEditing(true)}
+          className={`flex-1 cursor-pointer ${
+            todo.completed
+              ? 'line-through text-gray-500'
+              : 'text-gray-900'
+          }`}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setIsEditing(true);
+            }
+          }}
+          aria-label={`Double-click to edit "${todo.text}"`}
+        >
+          {todo.text}
+        </span>
+      )}
       <button
         onClick={onDelete}
         className="px-3 py-1 text-red-600 hover:bg-red-50 rounded text-sm transition-colors"
