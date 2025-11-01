@@ -20,7 +20,7 @@ describe('TodoItem', () => {
   });
 
   describe('Display Mode', () => {
-    it('should render checkbox, text, and delete button', () => {
+    it('should render checkbox, text, edit button, and delete button', () => {
       render(
         <TodoItem
           todo={mockTodo}
@@ -30,8 +30,9 @@ describe('TodoItem', () => {
         />
       );
 
-      expect(screen.getByRole('checkbox')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /mark.*complete/i })).toBeInTheDocument();
       expect(screen.getByText('Test todo')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /edit/i })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument();
     });
 
@@ -45,7 +46,7 @@ describe('TodoItem', () => {
         />
       );
 
-      const checkbox = screen.getByRole('checkbox');
+      const checkbox = screen.getByRole('button', { name: /mark.*complete/i });
       fireEvent.click(checkbox);
 
       expect(mockOnToggle).toHaveBeenCalledTimes(1);
@@ -94,7 +95,7 @@ describe('TodoItem', () => {
       );
 
       const text = screen.getByText(completedTodo.text);
-      expect(text).toHaveClass('text-gray-400');
+      expect(text).toHaveClass('text-gray-500');
     });
 
     it('should not have strikethrough when todo is not completed', () => {
@@ -122,7 +123,7 @@ describe('TodoItem', () => {
         />
       );
 
-      const checkbox = screen.getByRole('checkbox');
+      const checkbox = screen.getByRole('button', { name: /mark.*complete/i });
       expect(checkbox).toHaveAttribute(
         'aria-label',
         'Mark "Test todo" as complete'
@@ -154,12 +155,12 @@ describe('TodoItem', () => {
       );
 
       const text = screen.getByText('Test todo');
-      expect(text).toHaveAttribute('aria-label', 'Double-click to edit "Test todo"');
+      expect(text).toHaveAttribute('aria-label', 'Todo: "Test todo"');
     });
   });
 
   describe('Edit Mode', () => {
-    it('should enter edit mode when text is double-clicked', () => {
+    it('should enter edit mode when edit button is clicked', () => {
       render(
         <TodoItem
           todo={mockTodo}
@@ -169,15 +170,13 @@ describe('TodoItem', () => {
         />
       );
 
-      const text = screen.getByText('Test todo');
-      fireEvent.doubleClick(text);
+      const editButton = screen.getByRole('button', { name: /edit/i });
+      fireEvent.click(editButton);
 
-      // Should show inline input field
+      // Should show inline input field and save/cancel buttons
       expect(screen.getByRole('textbox')).toBeInTheDocument();
-      
-      // Checkbox and delete button should still be visible
-      expect(screen.getByRole('checkbox')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /save/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument();
     });
 
     it('should pre-fill input with current todo text', () => {
@@ -190,8 +189,8 @@ describe('TodoItem', () => {
         />
       );
 
-      const text = screen.getByText('Test todo');
-      fireEvent.doubleClick(text);
+      const editButton = screen.getByRole('button', { name: /edit/i });
+      fireEvent.click(editButton);
 
       const input = screen.getByRole('textbox') as HTMLInputElement;
       expect(input.value).toBe('Test todo');
@@ -208,13 +207,38 @@ describe('TodoItem', () => {
         />
       );
 
-      // Enter edit mode via double-click
-      const text = screen.getByText('Test todo');
-      await user.dblClick(text);
+      // Enter edit mode by clicking edit button
+      const editButton = screen.getByRole('button', { name: /edit/i });
+      await user.click(editButton);
 
       const input = screen.getByRole('textbox');
       await user.clear(input);
       await user.type(input, 'Updated text{Enter}');
+
+      expect(mockOnEdit).toHaveBeenCalledWith('Updated text');
+    });
+
+    it('should call onEdit with new text when Save button is clicked', async () => {
+      const user = userEvent.setup();
+      render(
+        <TodoItem
+          todo={mockTodo}
+          onToggle={mockOnToggle}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />
+      );
+
+      // Enter edit mode by clicking edit button
+      const editButton = screen.getByRole('button', { name: /edit/i });
+      await user.click(editButton);
+
+      const input = screen.getByRole('textbox');
+      await user.clear(input);
+      await user.type(input, 'Updated text');
+
+      const saveButton = screen.getByRole('button', { name: /save/i });
+      await user.click(saveButton);
 
       expect(mockOnEdit).toHaveBeenCalledWith('Updated text');
     });
@@ -230,9 +254,9 @@ describe('TodoItem', () => {
         />
       );
 
-      // Enter edit mode via double-click
-      const text = screen.getByText('Test todo');
-      await user.dblClick(text);
+      // Enter edit mode by clicking edit button
+      const editButton = screen.getByRole('button', { name: /edit/i });
+      await user.click(editButton);
 
       const input = screen.getByRole('textbox');
       await user.clear(input);
@@ -245,7 +269,8 @@ describe('TodoItem', () => {
       expect(screen.getByText('Test todo')).toBeInTheDocument();
     });
 
-    it('should exit edit mode without saving when input loses focus', () => {
+    it('should exit edit mode without saving when Cancel button is clicked', async () => {
+      const user = userEvent.setup();
       render(
         <TodoItem
           todo={mockTodo}
@@ -255,13 +280,16 @@ describe('TodoItem', () => {
         />
       );
 
-      // Enter edit mode via double-click
-      const text = screen.getByText('Test todo');
-      fireEvent.doubleClick(text);
+      // Enter edit mode by clicking edit button
+      const editButton = screen.getByRole('button', { name: /edit/i });
+      await user.click(editButton);
 
-      const input = screen.getByRole('textbox') as HTMLInputElement;
-      fireEvent.change(input, { target: { value: 'Changed text' } });
-      fireEvent.blur(input);
+      const input = screen.getByRole('textbox');
+      await user.clear(input);
+      await user.type(input, 'Changed text');
+
+      const cancelButton = screen.getByRole('button', { name: /cancel/i });
+      await user.click(cancelButton);
 
       expect(mockOnEdit).not.toHaveBeenCalled();
       // Should be back in display mode with original text
@@ -280,9 +308,9 @@ describe('TodoItem', () => {
         />
       );
 
-      // Enter edit mode via double-click
-      const text = screen.getByText('Test todo');
-      await user.dblClick(text);
+      // Enter edit mode by clicking edit button
+      const editButton = screen.getByRole('button', { name: /edit/i });
+      await user.click(editButton);
 
       // Press Enter without changing text
       const input = screen.getByRole('textbox');
@@ -302,9 +330,9 @@ describe('TodoItem', () => {
         />
       );
 
-      // Enter edit mode via double-click
-      const text = screen.getByText('Test todo');
-      await user.dblClick(text);
+      // Enter edit mode by clicking edit button
+      const editButton = screen.getByRole('button', { name: /edit/i });
+      await user.click(editButton);
 
       const input = screen.getByRole('textbox');
       await user.clear(input);
@@ -324,9 +352,9 @@ describe('TodoItem', () => {
         />
       );
 
-      // Enter edit mode via double-click
-      const text = screen.getByText('Test todo');
-      await user.dblClick(text);
+      // Enter edit mode by clicking edit button
+      const editButton = screen.getByRole('button', { name: /edit/i });
+      await user.click(editButton);
 
       const input = screen.getByRole('textbox');
       await user.clear(input);
@@ -345,9 +373,9 @@ describe('TodoItem', () => {
         />
       );
 
-      // Enter edit mode via double-click
-      const text = screen.getByText('Test todo');
-      fireEvent.doubleClick(text);
+      // Enter edit mode by clicking edit button
+      const editButton = screen.getByRole('button', { name: /edit/i });
+      fireEvent.click(editButton);
 
       const input = screen.getByRole('textbox');
       expect(input).toHaveAttribute('aria-label', 'Edit todo text');

@@ -65,7 +65,7 @@ describe('TodoApp', () => {
     it('should render app title', () => {
       render(<TodoApp />);
 
-      const title = screen.getByRole('heading', { name: /todo list/i });
+      const title = screen.getByRole('heading', { name: /my tasks/i });
       expect(title).toBeInTheDocument();
     });
 

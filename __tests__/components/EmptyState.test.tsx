@@ -5,13 +5,14 @@ describe('EmptyState', () => {
   it('should render empty state message', () => {
     render(<EmptyState />);
 
-    expect(screen.getByText(/No todos yet! Add one above to get started/)).toBeInTheDocument();
+    expect(screen.getByText(/No tasks yet/)).toBeInTheDocument();
+    expect(screen.getByText(/Add one to get started and stay productive/)).toBeInTheDocument();
   });
 
   it('should render encouraging text with emoji', () => {
     render(<EmptyState />);
 
-    expect(screen.getByText('🎯', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText('✨', { exact: false })).toBeInTheDocument();
   });
 
   it('should have proper styling and layout', () => {
@@ -24,7 +25,7 @@ describe('EmptyState', () => {
   it('should have proper text styling', () => {
     render(<EmptyState />);
 
-    const text = screen.getByText(/No todos yet/);
-    expect(text).toHaveClass('text-lg', 'text-gray-600');
+    const text = screen.getByText(/No tasks yet/);
+    expect(text).toHaveClass('text-xl', 'font-semibold', 'text-gray-800');
   });
 });

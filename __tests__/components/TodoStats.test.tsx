@@ -42,7 +42,7 @@ describe('TodoStats', () => {
 
     // Find completed count
     expect(screen.getByText('2')).toBeInTheDocument();
-    expect(screen.getByText('Completed')).toBeInTheDocument();
+    expect(screen.getByText(/Completed/)).toBeInTheDocument();
   });
 
   it('should display correct pending count', () => {
